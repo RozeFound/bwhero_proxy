@@ -59,8 +59,8 @@ def compress_image(data: bytes, grayscale: bool = False, quality: int = 70) -> b
 
     return image_bytes
 
-@app.get("/")
-async def root(request: Request):
+@app.get("/bwhero")
+async def bwhero(request: Request):
 
     query = request.query_params
 
