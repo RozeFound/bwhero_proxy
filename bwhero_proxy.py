@@ -1,6 +1,7 @@
 import io, json, re
 
 from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from starlette.background import BackgroundTask 
@@ -13,6 +14,14 @@ from PIL import Image
 import pillow_avif
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def pick(headers: Dict[str, str], keys: List[str]) -> Dict[str, str]:
     return {k: headers.get(k) for k in keys if k in headers}
@@ -69,7 +78,7 @@ async def bwhero(request: Request):
 
     try:
 
-        async with AsyncClient() as client:
+        async with AsyncClient(follow_redirects=True) as client:
 
             headers = {
                 **pick(request.headers, ["cookie", "dnt", "referer"]),
